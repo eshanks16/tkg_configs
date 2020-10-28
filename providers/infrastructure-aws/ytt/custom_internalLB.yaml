@@ -1,0 +1,11 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind":"AWSCluster"})
+---
+#! Use a Private Load Balancer instead of the default Load Balancers
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
+kind: AWSCluster
+spec:
+  #@overlay/match missing_ok=True
+  controlPlaneLoadBalancer:
+    scheme: internal

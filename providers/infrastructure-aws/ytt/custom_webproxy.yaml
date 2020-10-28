@@ -1,0 +1,44 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind":"KubeadmControlPlane"}), expects
+---
+apiVersion: controlplane.cluster.x-k8s.io/v1alpha3
+kind: KubeadmControlPlane
+spec:
+  kubeadmConfigSpec:
+    #@overlay/match missing_ok=True
+    preKubeadmCommands:
+    #! Add HTTP_PROXY to containerd configuration file
+    - echo '[Service]' > /etc/systemd/system/containerd.service.d/http-proxy.conf
+    - echo 'Environment="HTTP_PROXY=http://10.0.4.168:3128"' >> /etc/systemd/system/containerd.service.d/http-proxy.conf
+    - echo 'Environment="NO_PROXY=.hollow.local,169.254.169.254,localhost,127.0.0.1,kubernetes.default.svc,.svc,.amazonaws.com,10.0.0.0/8,10.96.0.0/12,100.96.0.0/11"' >> /etc/systemd/system/containerd.service.d/http-proxy.conf
+    - echo 'PROXY_ENABLED="yes"' > /etc/sysconfig/proxy
+    - echo 'HTTP_PROXY="http://10.0.4.168:3128"' >> /etc/sysconfig/proxy
+    - echo 'NO_PROXY=".hollow.local,169.254.169.254,localhost,127.0.0.1,kubernetes.default.svc,.svc,.amazonaws.com,10.0.0.0/8,10.96.0.0/12,100.96.0.0/11"' >> /etc/sysconfig/proxy
+    #@overlay/match missing_ok=True
+    postKubeadmCommands: 
+    #! Restart containerd service
+    - systemctl restart containerd
+
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind":"KubeadmConfigTemplate"}), expects="1+"
+---
+apiVersion: bootstrap.cluster.x-k8s.io/v1alpha3
+kind: KubeadmConfigTemplate
+spec:
+  template:
+    spec:
+      #@overlay/match missing_ok=True
+      preKubeadmCommands:
+      #! Add HTTP_PROXY to containerd configuration file
+    - echo '[Service]' > /etc/systemd/system/containerd.service.d/http-proxy.conf
+    - echo 'Environment="HTTP_PROXY=http://10.0.4.168:3128"' >> /etc/systemd/system/containerd.service.d/http-proxy.conf
+    - echo 'Environment="NO_PROXY=.hollow.local,169.254.169.254,localhost,127.0.0.1,kubernetes.default.svc,.svc,.amazonaws.com,10.0.0.0/8,10.96.0.0/12,100.96.0.0/11"' >> /etc/systemd/system/containerd.service.d/http-proxy.conf
+    - echo 'PROXY_ENABLED="yes"' > /etc/sysconfig/proxy
+    - echo 'HTTP_PROXY="http://10.0.4.168:3128"' >> /etc/sysconfig/proxy
+    - echo 'NO_PROXY=".hollow.local,169.254.169.254,localhost,127.0.0.1,kubernetes.default.svc,.svc,.amazonaws.com,10.0.0.0/8,10.96.0.0/12,100.96.0.0/11"' >> /etc/sysconfig/proxy
+      #@overlay/match missing_ok=True
+      postKubeadmCommands: 
+      #! Restart containerd service
+      - systemctl restart containerd

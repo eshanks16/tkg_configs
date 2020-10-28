@@ -1,0 +1,228 @@
+release:
+  version: 1.1.3
+components:
+  calico_all:
+    version: v3.11.2+vmware.1
+  cloud_provider_vsphere:
+    version: v1.1.0+vmware.3
+  cluster_api:
+    version: v0.3.6+vmware.2
+  cluster_api_aws:
+    version: v0.5.4+vmware.2
+  cluster_api_vsphere:
+    version: v0.6.6+vmware.2
+  cni_plugins:
+    version: v0.8.6+vmware.2
+  containerd:
+    version: v1.3.4+vmware.1
+  contour:
+    version: v1.2.1+vmware.1
+  coredns:
+    version: v1.6.5+vmware.6
+  crash-diagnostics:
+    version: v0.2.2+vmware.3
+  cri_tools:
+    version: v1.16.1+vmware.5
+  csi_attacher:
+    version: v2.0.0+vmware.2
+  csi_livenessprobe:
+    version: v1.1.0+vmware.8
+  csi_node_driver_registrar:
+    version: v1.2.0+vmware.2
+  csi_provisioner:
+    version: v1.4.0+vmware.3
+  dex:
+    version: v2.22.0+vmware.1
+  envoy:
+    version: v1.13.1+vmware.1
+  etcd:
+    version: v3.4.3+vmware.6
+  fluent-bit:
+    version: v1.3.8+vmware.1
+  gangway:
+    version: v3.2.0+vmware.1
+  haproxy_ova:
+    version: v1.2.4+vmware.1
+  jetstack_cert-manager:
+    version: v0.11.0+vmware.1
+  kube_rbac_proxy:
+    version: v0.4.1+vmware.2
+  kubernetes:
+    version: v1.17.9+vmware.1
+  kubernetes-sigs_kind:
+    version: v0.8.1-1.18.6+vmware.1
+  node_ova:
+    version: v1.18.6+vmware.1,v1.17.9+vmware.1
+  tanzu_tkg-cli:
+    version: v1.1.3+vmware.1
+  tkg_extensions_manifests:
+    version: v1.1.0+vmware.1
+  vsphere_csi_driver:
+    version: v2.0.0+vmware.3
+kubeadmConfigSpec:
+  apiVersion: kubeadm.k8s.io/v1beta2
+  kind: ClusterConfiguration
+  imageRepository: registry.tkg.vmware.run
+  kubernetesVersion: v1.17.9+vmware.1
+  etcd:
+    local:
+      dataDir: /var/lib/etcd
+      imageRepository: registry.tkg.vmware.run
+      imageTag: v3.4.3_vmware.6
+  dns:
+    type: CoreDNS
+    imageRepository: registry.tkg.vmware.run
+    imageTag: v1.6.5_vmware.6
+kindKubeadmConfigSpec:
+- 'kind: Cluster'
+- 'apiVersion: kind.x-k8s.io/v1alpha4'
+- 'kubeadmConfigPatches:'
+- '- |'
+- '  apiVersion: kubeadm.k8s.io/v1beta2'
+- '  kind: ClusterConfiguration'
+- '  imageRepository: registry.tkg.vmware.run'
+- '  etcd:'
+- '    local:'
+- '      imageRepository: registry.tkg.vmware.run'
+- '      imageTag: v3.4.3_vmware.6'
+- '  dns:'
+- '    type: CoreDNS'
+- '    imageRepository: registry.tkg.vmware.run'
+- '    imageTag: v1.6.5_vmware.6'
+ami:
+  ap-northeast-1:
+    id: ami-04e0ce2beb7c4a109
+  ap-northeast-2:
+    id: ami-09f28d96e512e0727
+  ap-south-1:
+    id: ami-0e6a296c8c7a7df9e
+  ap-southeast-1:
+    id: ami-0fb4218dcd60e76ed
+  ap-southeast-2:
+    id: ami-0895e9aeae9979a6a
+  eu-central-1:
+    id: ami-0c2b3482c3214fc98
+  eu-west-1:
+    id: ami-037fb52e71feef872
+  eu-west-2:
+    id: ami-0e816bf1275022e29
+  eu-west-3:
+    id: ami-0a7ba5ac50e603c56
+  sa-east-1:
+    id: ami-08154efd012310778
+  us-east-1:
+    id: ami-027d4ad3109c17cbd
+  us-east-2:
+    id: ami-0472cd75446632c4b
+  us-gov-east-1:
+    id: ami-03af68da920782775
+  us-gov-west-1:
+    id: ami-0537fe992d2ba8f05
+  us-west-2:
+    id: ami-0240e938c39a7d9b0
+imageConfig:
+  imageRepository: registry.tkg.vmware.run
+images:
+  cabpkControllerImage:
+    imagePath: cluster-api/kubeadm-bootstrap-controller
+    tag: v0.3.6_vmware.2
+  calicoCniImage:
+    imagePath: calico-all/cni-plugin
+    tag: v3.11.2_vmware.1
+  calicoKubecontrollerImage:
+    imagePath: calico-all/kube-controllers
+    tag: v3.11.2_vmware.1
+  calicoNodeImage:
+    imagePath: calico-all/node
+    tag: v3.11.2_vmware.1
+  calicoPodDaemonImage:
+    imagePath: calico-all/pod2daemon
+    tag: v3.11.2_vmware.1
+  capaControllerImage:
+    imagePath: cluster-api/cluster-api-aws-controller
+    tag: v0.5.4_vmware.2
+  capiControllerImage:
+    imagePath: cluster-api/cluster-api-controller
+    tag: v0.3.6_vmware.2
+  capvControllerImage:
+    imagePath: cluster-api/cluster-api-vsphere-controller
+    tag: v0.6.6_vmware.2
+  ccmControllerImage:
+    imagePath: ccm/manager
+    tag: v1.1.0_vmware.3
+  certMgrControllerImage:
+    imagePath: cert-manager/cert-manager-controller
+    tag: v0.11.0_vmware.1
+  certMgrInjectorImage:
+    imagePath: cert-manager/cert-manager-cainjector
+    tag: v0.11.0_vmware.1
+  certMgrWebhookImage:
+    imagePath: cert-manager/cert-manager-webhook
+    tag: v0.11.0_vmware.1
+  contourImage:
+    imagePath: contour
+    tag: v1.2.1_vmware.1
+  coredns:
+    imagePath: coredns
+    tag: v1.6.5_vmware.6
+  csiAttacherImage:
+    imagePath: csi/csi-attacher
+    tag: v2.0.0_vmware.2
+  csiControllerImage:
+    imagePath: csi/vsphere-block-csi-driver
+    tag: v2.0.0_vmware.3
+  csiLivenessProbeImage:
+    imagePath: csi/csi-livenessprobe
+    tag: v1.1.0_vmware.8
+  csiMetaDataSyncerImage:
+    imagePath: csi/volume-metadata-syncer
+    tag: v2.0.0_vmware.3
+  csiNodeDriverRegistrarImage:
+    imagePath: csi/csi-node-driver-registrar
+    tag: v1.2.0_vmware.2
+  csiProvisonerImage:
+    imagePath: csi/csi-provisioner
+    tag: v1.4.0_vmware.3
+  dexImage:
+    imagePath: dex
+    tag: v2.22.0_vmware.1
+  envoyImage:
+    imagePath: envoy
+    tag: v1.13.1_vmware.1
+  etcd:
+    imagePath: etcd
+    tag: v3.4.3_vmware.6
+  fluentBitImage:
+    imagePath: fluent-bit
+    tag: v1.3.8_vmware.1
+  gangwayImage:
+    imagePath: gangway
+    tag: v3.2.0_vmware.1
+  kcpControllerImage:
+    imagePath: cluster-api/kubeadm-control-plane-controller
+    tag: v0.3.6_vmware.2
+  kindNodeImage:
+    imagePath: kind/node
+    tag: v1.18.6_vmware.1
+  kubeApiServer:
+    imagePath: kube-apiserver
+    tag: v1.17.9_vmware.1
+  kubeControllerManager:
+    imagePath: kube-controller-manager
+    tag: v1.17.9_vmware.1
+  kubeProxy:
+    imagePath: kube-proxy
+    tag: v1.17.9_vmware.1
+  kubeRbacProxyControllerImage:
+    imagePath: cluster-api/kube-rbac-proxy
+    tag: v0.4.1_vmware.2
+  kubeScheduler:
+    imagePath: kube-scheduler
+    tag: v1.17.9_vmware.1
+  pause:
+    imagePath: pause
+    tag: "3.1"
+  tkgExtensionsTemplatesImage:
+    imagePath: tkg-extensions-templates
+    tag: v1.1.0_vmware.1
+extensions: {}

@@ -1,0 +1,166 @@
+release:
+  version: 1.0.0
+components:
+  kubernetes:
+    version: v1.17.3+vmware.2
+  etcd:
+    version: v3.4.3+vmware.4
+  coredns:
+    version: v1.6.5+vmware.4
+  cri_tools:
+    version: v1.16.1+vmware.3
+  cni_plugins:
+    versions: v0.7.5+vmware.6
+  cluster_api:
+    version: v0.3.3+vmware.1
+  cluster_api_vsphere:
+    version: v0.6.3+vmware.1
+  cluster_api_aws:
+    version: v0.5.2+vmware.1
+  kube_rbac_proxy:
+    version: v0.4.1+vmware.2
+kubeadmConfigSpec:
+  apiversion: kubeadm.k8s.io/v1beta2
+  kind: ClusterConfiguration
+  imageRepository: registry.tkg.vmware.run
+  kubernetesVersion: v1.17.3+vmware.2
+  etcd:
+    local:
+      dataDir: /var/lib/etcd
+      imageRepository: registry.tkg.vmware.run
+      imageTag: v3.4.3_vmware.4
+  dns:
+    type: CoreDNS
+    imageRepository: registry.tkg.vmware.run
+    imageTag: v1.6.5_vmware.4
+ami:
+  ap-northeast-1:
+    id: ami-07d5076afaf13aa77
+  ap-northeast-2:
+    id: ami-0cb22de4c4da68542
+  ap-south-1:
+    id: ami-0acc928b65d161ebd
+  ap-southeast-1:
+    id: ami-089a436f0bace9335
+  ap-southeast-2:
+    id: ami-083ec7e91a68e9c73
+  eu-central-1:
+    id: ami-0d9f883266dee911e
+  eu-west-1:
+    id: ami-0ec61dd68529b73e2
+  eu-west-2:
+    id: ami-0e9216661312a1a35
+  eu-west-3:
+    id: ami-05dfe276355eb8f12
+  sa-east-1:
+    id: ami-0cfe19e780369d05f
+  us-east-1:
+    id: ami-0cdd7837e1fdd81f8
+  us-east-2:
+    id: ami-0f02df79b659875ec
+  us-west-2:
+    id: ami-074a82cfc610da035
+  us-west-1:
+    id: ami-0ec28d83f96a31158
+imageConfig:
+  imageRepository: registry.tkg.vmware.run
+images:
+  kube-apiserver:
+    imagePath: kube-apiserver
+    tag: v1.17.3_vmware.2
+  kube-controller-manager:
+    imagePath: kube-controller-manager
+    tag: v1.17.3_vmware.2
+  kube-scheduler:
+    imagePath: kube-scheduler
+    tag: v1.17.3_vmware.2
+  kube-proxy:
+    imagePath: kube-proxy
+    tag: v1.17.3_vmware.2
+  coredns:
+    imagePath: coredns
+    tag: v1.6.5_vmware.4
+  etcd:
+    imagePath: etcd
+    tag: v3.4.3_vmware.4
+  pause:
+    imagePath: pause
+    tag: 3.1
+  ccmControllerImage:
+    imagePath: ccm/manager
+    tag: v1.1.0_vmware.2
+  csiControllerImage: 
+    imagePath: csi/vsphere-block-csi-driver
+    tag: v1.0.2_vmware.1
+  csiMetaDataSyncerImage:
+    imagePath: csi/volume-metadata-syncer
+    tag: v1.0.2_vmware.1
+  csiAttacherImage:
+    imagePath: csi/csi-attacher
+    tag: v1.1.1_vmware.7
+  csiLivenessProbeImage:
+    imagePath: csi/csi-livenessprobe
+    tag: v1.1.0_vmware.7
+  csiProvisonerImage:
+    imagePath: csi/csi-provisioner
+    tag: v1.4.0_vmware.2
+  csiNodeDriverRegistrarImage:
+    imagePath: csi/csi-node-driver-registrar
+    tag: v1.1.0_vmware.7
+  capiControllerImage:
+    imagePath: cluster-api/cluster-api-controller
+    tag: v0.3.3_vmware.1
+  capvControllerImage:
+    imagePath: cluster-api/cluster-api-vsphere-controller
+    tag: v0.6.3_vmware.1
+  capaControllerImage:
+    imagePath: cluster-api/cluster-api-aws-controller
+    tag: v0.5.2_vmware.1
+  capbpkControllerImage:
+    imagePath: cluster-api/kubeadm-bootstrap-controller
+    tag: v0.3.3_vmware.1
+  kcpControllerImage:
+    imagePath: cluster-api/kubeadm-control-plane-controller
+    tag: v0.3.3_vmware.1
+  kubeRbacProxyControllerImage:
+    imagePath: cluster-api/kube-rbac-proxy
+    tag: v0.4.1_vmware.2
+  calicoNodeImage:
+    imagePath: calico-all/node
+    tag: v3.11.2_vmware.1
+  calicoKubecontrollerImage:
+    imagePath: calico-all/kube-controllers
+    tag: v3.11.2_vmware.1
+  calicoCniImage:
+    imagePath: calico-all/cni-plugin
+    tag: v3.11.2_vmware.1
+  calicoPodDaemonImage:
+    imagePath: calico-all/pod2daemon
+    tag: v3.11.2_vmware.1
+  kindNodeImage:
+    imagePath: kind/node
+    tag: v1.17.3_vmware.2
+  certMgrInjectorImage:
+    imagePath: cert-manager/cert-manager-cainjector
+    tag: v0.11.0_vmware.1
+  certMgrControllerImage:
+    imagePath: cert-manager/cert-manager-controller
+    tag: v0.11.0_vmware.1
+  certMgrWebhookImage:
+    imagePath: cert-manager/cert-manager-webhook
+    tag: v0.11.0_vmware.1
+  gangwayImage:
+    imagePath: gangway
+    tag: v3.2.0_vmware.1
+  contourImage:
+    imagePath: contour
+    tag: v1.2.1_vmware.1
+  envoyImage:
+    imagePath: envoy
+    tag: v1.13.1_vmware.1
+  fluentBitImage:
+    imagePath: fluent-bit
+    tag: v1.3.8_vmware.1
+  dexImage:
+    imagePath: dex
+    tag: v2.22.0_vmware.1

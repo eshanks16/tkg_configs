@@ -1,0 +1,11 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+
+#@ if not data.values.ENABLE_MHC:
+
+#@overlay/match by=overlay.subset({"kind":"MachineHealthCheck"})
+---
+#@overlay/remove
+
+#@ end
+

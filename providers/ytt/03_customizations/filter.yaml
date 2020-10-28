@@ -1,0 +1,23 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+
+#@ if data.values.FILTER_BY_ADDON_TYPE:
+
+#@ def filter_addons_objects_by_type(x, l, r):
+#@
+#@  if not ("metadata" in l and "annotations" in l["metadata"] and "tkg.tanzu.vmware.com/addon-type" in l["metadata"]["annotations"]):
+#@    return True
+#@  end
+#@
+#@  if (l["metadata"]["annotations"]["tkg.tanzu.vmware.com/addon-type"] == data.values.FILTER_BY_ADDON_TYPE):
+#@    return False
+#@  end
+#@
+#@  return True
+#@ end
+
+#@overlay/match by=filter_addons_objects_by_type,expects="0+"
+---
+#@overlay/remove
+
+#@ end

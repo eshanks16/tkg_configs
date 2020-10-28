@@ -1,0 +1,12 @@
+(@ def vsphere_conf_from_text(): @)[Global]
+insecure-flag = true
+cluster-id = {NAMESPACE}/{CLUSTER_NAME}
+
+[VirtualCenter "{VSPHERE_SERVER}"]
+user = "{VSPHERE_USERNAME}"
+password = "{VSPHERE_PASSWORD}"
+datacenters = "{VSPHERE_DATACENTER}"
+
+[Network]
+public-network = "{VSPHERE_NETWORK}"
+(@ end @)

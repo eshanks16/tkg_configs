@@ -1,0 +1,80 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+#@ load("csi.lib.yaml", "controller_service_account", "vsphere_config", "csi_driver", "cluster_role","cluster_role_binding","daemonset","controller_deployment")
+
+---
+apiVersion: addons.cluster.x-k8s.io/v1alpha3
+kind: ClusterResourceSet
+metadata:
+  name: #@ "{}-csi".format(data.values.CLUSTER_NAME)
+spec:
+  strategy: "ApplyOnce"
+  clusterSelector:
+    matchLabels:
+      tkg.tanzu.vmware.com/cluster-name: #@ data.values.CLUSTER_NAME
+  resources:
+    - kind: Secret
+      name: #@ "{}-vsphere-csi-controller".format(data.values.CLUSTER_NAME)
+    - kind: Secret
+      name: #@ "{}-csi-vsphere-config".format(data.values.CLUSTER_NAME)
+    - kind: ConfigMap
+      name: #@ "{}-csi.vsphere.vmware.com".format(data.values.CLUSTER_NAME)
+    - kind: ConfigMap
+      name: #@ "{}-vsphere-csi-controller-role".format(data.values.CLUSTER_NAME)
+    - kind: ConfigMap
+      name: #@ "{}-vsphere-csi-controller-binding".format(data.values.CLUSTER_NAME)
+    - kind: ConfigMap
+      name: #@ "{}-vsphere-csi-node".format(data.values.CLUSTER_NAME)
+    - kind: ConfigMap
+      name: #@ "{}-vsphere-csi-controller".format(data.values.CLUSTER_NAME)
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ "{}-vsphere-csi-controller".format(data.values.CLUSTER_NAME)
+type: addons.cluster.x-k8s.io/resource-set
+stringData:
+  data: #@ yaml.encode(controller_service_account())
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ "{}-csi-vsphere-config".format(data.values.CLUSTER_NAME)
+type: addons.cluster.x-k8s.io/resource-set
+stringData:
+  data: #@ yaml.encode(vsphere_config())
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ "{}-csi.vsphere.vmware.com".format(data.values.CLUSTER_NAME)
+data:
+  data: #@ yaml.encode(csi_driver())
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ "{}-vsphere-csi-controller-role".format(data.values.CLUSTER_NAME)
+data:
+  data: #@ yaml.encode(cluster_role())
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ "{}-vsphere-csi-controller-binding".format(data.values.CLUSTER_NAME)
+data:
+  data: #@ yaml.encode(cluster_role_binding())
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ "{}-vsphere-csi-node".format(data.values.CLUSTER_NAME)
+data:
+  data: #@ yaml.encode(daemonset())
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ "{}-vsphere-csi-controller".format(data.values.CLUSTER_NAME)
+data:
+  data: #@ yaml.encode(controller_deployment())

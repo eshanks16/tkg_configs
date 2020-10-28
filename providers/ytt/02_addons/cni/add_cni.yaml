@@ -1,0 +1,100 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+
+#@ if data.values.PROVIDER_TYPE != "tkg-service-vsphere":
+
+#@ if data.values.CNI == "calico":
+#@ load("calico/calico.lib.yaml", "calicoyaml")
+#@ load("calico/calico_overlay.lib.yaml", "calicooverlay")
+
+---
+apiVersion: addons.cluster.x-k8s.io/v1alpha3
+kind: ClusterResourceSet
+metadata:
+  name: #@ "{}-cni-calico".format(data.values.CLUSTER_NAME)
+  labels:
+    cluster.x-k8s.io/cluster-name: #@ data.values.CLUSTER_NAME
+  annotations:
+    tkg.tanzu.vmware.com/addon-type: "cni/calico"
+spec:
+  strategy: "ApplyOnce"
+  clusterSelector:
+    matchLabels:
+      tkg.tanzu.vmware.com/cluster-name: #@ data.values.CLUSTER_NAME
+  resources:
+  - name: #@ "{}-calico".format(data.values.CLUSTER_NAME)
+    kind: Secret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ "{}-calico".format(data.values.CLUSTER_NAME)
+  annotations:
+    tkg.tanzu.vmware.com/addon-type: "cni/calico"
+type: addons.cluster.x-k8s.io/resource-set
+stringData:
+  value: #@ yaml.encode(overlay.apply(calicoyaml(), calicooverlay()))
+
+#@ end
+
+
+
+
+
+
+#@ if data.values.CNI == "antrea":
+#@ load("antrea/antrea.lib.yaml", "antreayaml")
+#@ load("antrea/antrea_overlay.lib.yaml", "antreaoverlay")
+
+---
+apiVersion: addons.cluster.x-k8s.io/v1alpha3
+kind: ClusterResourceSet
+metadata:
+  name: #@ "{}-cni-antrea".format(data.values.CLUSTER_NAME)
+  labels:
+    cluster.x-k8s.io/cluster-name: #@ data.values.CLUSTER_NAME
+  annotations:
+    tkg.tanzu.vmware.com/addon-type: "cni/antrea"
+spec:
+  strategy: "ApplyOnce"
+  clusterSelector:
+    matchLabels:
+      tkg.tanzu.vmware.com/cluster-name: #@ data.values.CLUSTER_NAME
+  resources:
+  - name: #@ "{}-antrea".format(data.values.CLUSTER_NAME)
+    kind: Secret
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ "{}-antrea".format(data.values.CLUSTER_NAME)
+  annotations:
+    tkg.tanzu.vmware.com/addon-type: "cni/antrea"
+type: addons.cluster.x-k8s.io/resource-set
+stringData:
+  value: #@ yaml.encode(overlay.apply(antreayaml(), antreaoverlay()))
+
+#! Add CNI ingress rules to AWS cluster incase of CNI=antrea
+#@overlay/match missing_ok=True,by=overlay.subset({"kind":"AWSCluster"})
+---
+kind: AWSCluster
+spec:
+  networkSpec:
+    #@overlay/match missing_ok=True
+    cni:
+      cniIngressRules:
+      - description: antrea1
+        fromPort: 10349
+        protocol: tcp
+        toPort: 10349
+      - description: genev
+        fromPort: 6081
+        protocol: udp
+        toPort: 6081
+
+
+#@ end
+
+#@ end

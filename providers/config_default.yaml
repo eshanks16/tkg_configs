@@ -1,0 +1,259 @@
+#@data/values
+
+#@overlay/match-child-defaults missing_ok=True
+---
+
+#! ---------------------------------------------------------------------
+#! List of variables used in cluster configuration and their default
+#! values, where available. It is recommended that overrides to any of
+#! these values be done is the user's configuration file
+#! (e.g. ~/.tkg/config.yaml) instead.
+#! ---------------------------------------------------------------------
+
+#! Settings for vSphere infrastructure provider
+#! ---------------------------------------------------------------------
+
+#! CPU,disk,memory values to be used for creating cluster VMs
+#! this can be overridden by defining the VSPHERE_WORKER_DISK_GIB for the workers
+#! and VSPHERE_CONTROL_PLANE_DISK_GIB for the control plane
+VSPHERE_NUM_CPUS: "2"
+VSPHERE_DISK_GIB: "40"
+VSPHERE_MEM_MIB: "4096"
+
+#! Specific overrides of the above settings that only apply control plane
+#! or worker nodes
+VSPHERE_CONTROL_PLANE_NUM_CPUS: "2"
+VSPHERE_CONTROL_PLANE_DISK_GIB: "40"
+VSPHERE_CONTROL_PLANE_MEM_MIB: "8192"
+
+VSPHERE_WORKER_NUM_CPUS: "2"
+VSPHERE_WORKER_DISK_GIB: "40"
+VSPHERE_WORKER_MEM_MIB: "4096"
+
+VSPHERE_CLONE_MODE: "fullClone"
+
+#! The network portgroup to assign each VM node
+VSPHERE_NETWORK: VM Network
+
+#! The name of the VM template to be used to create a specific version of a Tanzu
+#! Kubernetes Cluster. Since the appropriate template is automatically
+#! discovered from the vCenter inventory, the use of this setting is no longer 
+#! necessary except to disambiguate among 2 or more applicable VM templates.
+VSPHERE_TEMPLATE:
+
+VIP_NETWORK_INTERFACE: "eth0"
+
+#! The contents of the public key to be injected into the VM nodes created
+VSPHERE_SSH_AUTHORIZED_KEY:
+VSPHERE_USERNAME:
+VSPHERE_PASSWORD:
+
+#! FQDN or IP address to vCenter
+VSPHERE_SERVER:
+
+#! Full inventory path or names are supported for the following
+#! the former is required if there are multiple entities of the same type and
+#! name in the VC inventory.
+VSPHERE_DATACENTER:
+#! Name of an existing resource pool in which to place this Tanzu Kubernetes cluster
+VSPHERE_RESOURCE_POOL:
+#! Name of the vSphere datastore to deploy the Tanzu Kubernetes cluster
+#! as it appears in the vSphere inventory
+VSPHERE_DATASTORE:
+#! name of an existing VM folder in which to place Tanzu Kubernetes Grid VMs
+VSPHERE_FOLDER:
+VSPHERE_STORAGE_POLICY_ID: ""
+
+
+#! Settings for AWS infrastructure provider
+#! ---------------------------------------------------------------------
+#! For list of supported regions, see TKG documentation.
+#! If you have already set an environment variable for the region, you must unset it.
+AWS_REGION:
+#! AZ has to be contained in the AWS region
+AWS_NODE_AZ: ""
+#! set these if you want 3 control plane nodes. The below
+#! availability zones must be in the same region as AWS_NODE_AZ
+AWS_NODE_AZ_1: ""
+AWS_NODE_AZ_2: ""
+#! A new VPC will be created for the cluster to be created if this is set blank
+#! to use a VPC that already exists in your selected AWS region, enter the ID of the VPC
+#! and then set AWS_PUBLIC_SUBNET_ID and AWS_PRIVATE_SUBNET_ID.
+#! This option is not required if you set AWS_VPC_CIDR.
+AWS_VPC_ID: ""
+AWS_PRIVATE_SUBNET_ID: ""
+AWS_PUBLIC_SUBNET_ID: ""
+AWS_PUBLIC_SUBNET_ID_1: ""
+AWS_PRIVATE_SUBNET_ID_1: ""
+AWS_PUBLIC_SUBNET_ID_2: ""
+AWS_PRIVATE_SUBNET_ID_2: ""
+AWS_VPC_CIDR: 10.0.0.0/16
+AWS_PRIVATE_NODE_CIDR: 10.0.0.0/24
+AWS_PUBLIC_NODE_CIDR: 10.0.1.0/24
+AWS_PRIVATE_NODE_CIDR_1: 10.0.2.0/24
+AWS_PUBLIC_NODE_CIDR_1: 10.0.3.0/24
+AWS_PRIVATE_NODE_CIDR_2: 10.0.4.0/24
+AWS_PUBLIC_NODE_CIDR_2: 10.0.5.0/24
+
+#! Control plane and worker node instance types.
+#! For node sizing recommendations, refer to TKG documentation.
+CONTROL_PLANE_MACHINE_TYPE: t3.small
+NODE_MACHINE_TYPE: m5.large
+
+#! Name of the SSH private key that you registered with your Amazon EC2 accoun
+AWS_SSH_KEY_NAME:
+
+#! Specify "true" to deploy an AWS basion host in the availability zone, or "false" to reuse an existing bastion host
+BASTION_HOST_ENABLED: "true"
+
+#! Settings for creating clusters on vSphere with Tanzu
+#! ---------------------------------------------------------------------
+
+#! Identifies the storage class to be used for storage of the disks that store the root file systems of the worker nodes.
+CONTROL_PLANE_STORAGE_CLASS:
+#! Specifies the name of the VirtualMachineClass that describes the virtual
+#! hardware settings to be used each control plane node in the pool.
+CONTROL_PLANE_VM_CLASS:
+#! Specifies a named storage class to be annotated as the default in the
+#! cluster. If you do not specify it, there is no default.
+DEFAULT_STORAGE_CLASS:
+#! Specifies the service domain for the cluster
+SERVICE_DOMAIN:
+#! Specifies named persistent volume (PV) storage classes for container
+#! workloads. Storage classes associated with the Supervisor Namespace are
+#! replicated in the cluster. In other words, each storage class listed must be
+#! available on the Supervisor Namespace for this to be a valid value
+STORAGE_CLASSES:
+#! Identifies the storage class to be used for storage of the disks that store the root file systems of the worker nodes.
+WORKER_STORAGE_CLASS:
+#! Specifies the name of the VirtualMachineClass that describes the virtual
+#! hardware settings to be used each worker node in the pool
+WORKER_VM_CLASS:
+
+
+#! Settings for AZURE infrastructure provider
+#! ---------------------------------------------------------------------
+#!
+
+#! Azure account configurations
+
+#! The Azure cloud to deploy to, supported clouds are :
+#! AzurePublicCloud, AzureChinaCloud, AzureGermanCloud, AzureUSGovernmentCloud
+AZURE_ENVIRONMENT: "AzurePublicCloud"
+#! The tenant ID is the ID of the AAD directory in which the app for Tanzu Kubernetes Grid is created
+#! A Tenant is representative of an organization within Azure Active Directory.
+#! It is a dedicated instance of the Azure AD service
+AZURE_TENANT_ID:
+#! The subscription ID is a GUID that uniquely identifies the subscription to use Azure services.
+AZURE_SUBSCRIPTION_ID:
+#! The client ID of the app for Tanzu Kubernetes Grid that you registered with Azure
+AZURE_CLIENT_ID:
+#! The client password of the app for Tanzu Kubernetes Grid that you registered with Azure
+AZURE_CLIENT_SECRET:
+#! Azure region where the resources will be created
+AZURE_LOCATION:
+#! SSH to allow for access to the cluster machines, as a base64-encoded string
+AZURE_SSH_PUBLIC_KEY_B64:
+#! Azure virtual machine size
+AZURE_CONTROL_PLANE_MACHINE_TYPE: "Standard_D2s_v3"
+AZURE_NODE_MACHINE_TYPE: "Standard_D2s_v3"
+
+#! resource-group-name that already exists in your Azure account.
+#! AZURE_RESOURCE_GROUP and AZURE_VNET_RESOURCE_GROUP are the same by default.
+
+#! Must be unique to each cluster.
+AZURE_RESOURCE_GROUP: ""
+#! If unset the value of AZURE_RESOURCE_GROUP will be used as the resoure group
+#! for the VNET
+AZURE_VNET_RESOURCE_GROUP: ""
+
+AZURE_VNET_NAME: ""
+AZURE_VNET_CIDR: ""
+AZURE_CONTROL_PLANE_SUBNET_NAME: ""
+AZURE_CONTROL_PLANE_SUBNET_CIDR: ""
+AZURE_NODE_SUBNET_NAME: ""
+AZURE_NODE_SUBNET_CIDR: ""
+
+
+
+
+#! OIDC-related configuration
+#! ---------------------------------------------------------------------
+#! Set these values to enable OIDC on management cluster.
+#! ENABLE_OIDC is either true or false. It can be set by user or by tkg cli option --enable-cluster-options="oidc"
+ENABLE_OIDC: false
+#! OIDC_ISSUER_URL is https://<KUBERNETES_API_SERVER_ENDPOINT>:30167
+#! OIDC_USERNAME_CLAIM is JWT claim to use as the user name. e.g, sub, email or name.
+#! OIDC_GROUPS_CLAIM is JWT claim to use as the user's group.
+#! OIDC_DEX_CA can be obtained by retrieving the secret dex-cert-tls from namespace tanzu-system-auth in the management cluster
+#! e.g. kubectl get secret dex-cert-tls -n tanzu-system-auth -o 'go-template={{ index .data "ca.crt" }}' | base64 -D | gzip | base64
+OIDC_ISSUER_URL:
+OIDC_USERNAME_CLAIM:
+OIDC_GROUPS_CLAIM:
+OIDC_DEX_CA:
+
+#! Machine Health Check settings
+ENABLE_MHC: true
+MHC_UNKNOWN_STATUS_TIMEOUT: 5m
+MHC_FALSE_STATUS_TIMEOUT: 5m
+
+
+#! Common configuration
+#! ---------------------------------------------------------------------
+
+#! Set this value to configure TKG to use a custom image repository for any
+#! container image that needs to be pulled during cluster creation. This is
+#! useful when deploying in an internet-restricted environment with the help
+#! of a private container registry.
+#! See TKG documentation for more information about preparing a private
+#! container repository.
+TKG_CUSTOM_IMAGE_REPOSITORY: ""
+TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY: false
+
+ENABLE_DEFAULT_STORAGE_CLASS: true
+
+CLUSTER_CIDR: 100.96.0.0/11
+SERVICE_CIDR: 100.64.0.0/13
+NODE_STARTUP_TIMEOUT: 20m
+
+CONTROL_PLANE_MACHINE_COUNT: 1
+WORKER_MACHINE_COUNT: 1
+#! sets the number of worker nodes in the first AZ, AWS_NODE_AZ.
+WORKER_MACHINE_COUNT_0:
+#! sets the number of worker nodes in the second AZ, AWS_NODE_AZ_1.
+WORKER_MACHINE_COUNT_1:
+#! sets the number of worker nodes in the third AZ, AWS_NODE_AZ_2.
+WORKER_MACHINE_COUNT_2:
+
+#! Internal configuration, not meant to be overriden
+#! ---------------------------------------------------------------------
+
+PROVIDER_TYPE:
+CLUSTER_NAME:
+CLUSTER_PLAN:
+NAMESPACE:
+TKG_CLUSTER_ROLE:
+TKG_VERSION:
+FILTER_BY_ADDON_TYPE:
+_VSPHERE_CONTROL_PLANE_ENDPOINT_IP:
+CNI: antrea
+KUBERNETES_VERSION: v1.19.1+vmware.2
+#! This is autofilled by TKG CLI
+AWS_AMI_ID:
+
+
+#! BoM file processing
+#! ---------------------------------------------------------------------
+
+#@ load("@ytt:yaml", "yaml")
+#@ load("@ytt:data", "data")
+
+#@ files = data.list()
+boms:
+    #@ for/end file in [ f for f in files if f.startswith("bom-") ]:
+    - #@ yaml.decode(data.read(file))
+
+
+#! Settings for Docker infrastructure provider
+#! ---------------------------------------------------------------------
+DOCKER_MACHINE_TEMPLATE_IMAGE:
